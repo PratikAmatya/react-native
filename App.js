@@ -17,6 +17,7 @@ import {
   View,
   Button,
   Linking,
+  RefreshControl,
 } from 'react-native';
 
 import {
@@ -28,136 +29,60 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 
 const App = () => {
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [items, setItems] = useState([
+    {key: 1, item: 'item 1'},
+    {key: 2, item: 'item 2'},
+    {key: 3, item: 'item 3'},
+    {key: 4, item: 'item 4'},
+    {key: 5, item: 'item 5'},
+    {key: 6, item: 'item 6'},
+  ]);
 
-  const [counter, setCounter] = useState(0);
+  const [Refreshing, setRefreshing] = useState(false);
 
+  const handleRefresh = () => {
+    setRefreshing(true);
+    setItems([...items, {key: 7, item: 'item 7'}, {key: 8, item: 'item 8'}]);
+    setRefreshing(false);
+  };
   return (
-    <View style={styles.body}>
-      <View style={styles.r1}>
-        <View style={styles.v11}>
-          <Text style={styles.text}>1</Text>
-        </View>
-        <View style={styles.v12}>
-          <Text style={styles.text}>2</Text>
-        </View>
-        <View style={styles.v13}>
-          <Text style={styles.text}>3</Text>
-        </View>
-      </View>
-
-      <View style={styles.r2}>
-        <Text style={styles.text}>4</Text>
-      </View>
-
-      <View style={styles.r3}>
-        <Text style={styles.text}>5</Text>
-      </View>
-
-      <View style={styles.r4}>
-        <View style={styles.v41}>
-          <Text style={styles.text}>6</Text>
-        </View>
-        <View style={styles.v42}>
-          <Text style={styles.text}>7</Text>
-        </View>
-      </View>
-
-      {/* <Text
-        style={{
-          fontSize: 29,
-          fontStyle: 'italic',
-          margin: 10,
-        }}>
-        {counter}
-      </Text>
-      <Button
-        title="Add"
-        onPress={() => {
-          let newCounter = parseInt(counter) + 1;
-          setCounter(newCounter);
-        }}
-      />
-      {loggedIn ? (
-        <Text style={styles.text}>Welcome Pratik!</Text>
-      ) : (
-        <Text style={styles.text}>Login Page</Text>
-      )}
-
-      <Button
-        title="Go to the video"
-        onPress={() => {
-          Linking.openURL('https://www.youtube.com/watch?v=_bI02tUf-do');
-        }}
-      />
-
-      <View style={{width: 500, paddingVertical: 40}}>
-        <Button
-          title={loggedIn ? 'Log Out' : 'Log In'}
-          onPress={() => setLoggedIn(!loggedIn)}
-        />
-      </View> */}
+    <View>
+      <ScrollView
+        style={styles.body}
+        horizontal={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={Refreshing}
+            onRefresh={handleRefresh}
+            colors={['red']}
+          />
+        }>
+        {items.map(singleitem => (
+          <View style={styles.item} key={singleitem.key}>
+            <Text style={styles.itemTitle}>{singleitem.item}</Text>
+          </View>
+        ))}
+      </ScrollView>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   body: {
-    flex: 1,
-    flexDirection: 'column',
-  },
-  r1: {
-    height: 70,
-    flexDirection: 'row',
-  },
-  v11: {
-    backgroundColor: 'cyan',
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  v12: {
-    backgroundColor: 'pink',
-    flex: 3,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  v13: {
+    // flex: 1,
+    // flexDirection: 'column',
     backgroundColor: 'yellow',
-    flex: 3,
+  },
+  item: {
+    backgroundColor: '#4ae1fa',
+    paddingVertical: 20,
+    marginVertical: 30,
+    marginHorizontal: 10,
     justifyContent: 'center',
     alignItems: 'center',
   },
-
-  r2: {
-    backgroundColor: 'red',
-    height: 80,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  r3: {
-    backgroundColor: 'lightgreen',
-    height: 80,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  r4: {
-    flex: 1,
-    flexDirection: 'row',
-  },
-  v41: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  v42: {
-    backgroundColor: 'blue',
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  text: {
-    fontSize: 25,
+  itemTitle: {
+    fontSize: 40,
     fontWeight: 'bold',
     fontStyle: 'italic',
   },
